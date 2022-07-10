@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pod-example
+  namespace: kube-system
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pod-example
+  template:
+    metadata:
+      labels:
+        app: pod-example
+    spec:
+      nodeName: k8s-02
+      containers:
+        - name: pod-example
+          image: golang:1.18
+          imagePullPolicy: IfNotPresent
+          command: ["/app/pod-example"]
+          volumeMounts:
+            - name: hooktls
+              mountPath: /etc/webhook/certs
+              readOnly: true
+            - name: app
+              mountPath: /app
+          ports:
+            - containerPort: 443
+      volumes:
+        - name: app
+          hostPath:
+            path: /root/app
+        - name: hooktls
+          secret:
+            secretName: pod-example-tls
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pod-example
+  namespace: kube-system
+  labels:
+    app: pod-example
+spec:
+  type: ClusterIP
+  ports:
+    - port: 443
+      targetPort: 443
+  selector:
+    app: pod-example

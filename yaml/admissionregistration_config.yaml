@@ -1,0 +1,44 @@
+apiVersion: admissionregistration.k8s.io/v1
+kind: MutatingWebhookConfiguration
+metadata:
+  name: pod-example
+webhooks:
+  - clientConfig:
+      caBundle: |
+        LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURoakNDQW02Z0F3SUJBZ0lVWEdGR05xL2cx
+        d3B3YStZTGh4QVZjc2NkU3hFd0RRWUpLb1pJaHZjTkFRRUwKQlFBd1NURUxNQWtHQTFVRUJoTUNl
+        bWd4Q3pBSkJnTlZCQWNUQW1KcU1Rc3dDUVlEVlFRS0V3SmlhakVMTUFrRwpBMVVFQ3hNQ1EwRXhF
+        ekFSQmdOVkJBTVRDa3QxWW1WeWJtVjBaWE13SGhjTk1qSXdOekV3TURreE16QXdXaGNOCk1qY3dO
+        ekE1TURreE16QXdXakJKTVFzd0NRWURWUVFHRXdKNmFERUxNQWtHQTFVRUJ4TUNZbW94Q3pBSkJn
+        TlYKQkFvVEFtSnFNUXN3Q1FZRFZRUUxFd0pEUVRFVE1CRUdBMVVFQXhNS1MzVmlaWEp1WlhSbGN6
+        Q0NBU0l3RFFZSgpLb1pJaHZjTkFRRUJCUUFEZ2dFUEFEQ0NBUW9DZ2dFQkFNa1dNY2NMeE93NURx
+        NjlWSTJOb3puaG9tanlrM29VCm1jNXQ2Zm94K1Y1bDlNbDA0WnRFWWdLVGpIS3BsR012NEkyVlNz
+        NXBFY1BQOHpOU1JvMEFjUzBDZS8vemZCbFoKeVpjL0hHcitQem5KZjArQzAvQlBBeVFGZkdJY0lK
+        eXUrckM5OCsrYkFXaEI5LzVSWnZ1TS9HWFY3WU1IWlBnNwpBYmJXd1lKcUVkU3Z5ZjZPdzJTYjBO
+        UVBqQVRoNm9SdWpKc09KemI3ek13TlJJNzNUaUZjWk5ENVM3ekJ6SnZOClFmVGJEME1yL0crKzFu
+        eTBhVU44YVFVWS9WQ2U3ak1SNXJmOFhYRDZPQXR1ZkZwMy9XRDV0aEtaTHpxQ1UzN1YKRjAvVUdG
+        UWlYREExRU1VdlBhWU1IQldUeHU1QUZTRDZGbG9kQks0c0ZmZkVrQzluRWxYWk1FRUNBd0VBQWFO
+        bQpNR1F3RGdZRFZSMFBBUUgvQkFRREFnRUdNQklHQTFVZEV3RUIvd1FJTUFZQkFmOENBUUl3SFFZ
+        RFZSME9CQllFCkZJT2gzb0lPOG1jVTQxTUVyOVdQZUhtek5vN1hNQjhHQTFVZEl3UVlNQmFBRklP
+        aDNvSU84bWNVNDFNRXI5V1AKZUhtek5vN1hNQTBHQ1NxR1NJYjNEUUVCQ3dVQUE0SUJBUURGdHJx
+        VjA4U2ZFMUFzd2JPY0llMmNwN0VpTTR4UQpnaTNwdkVvcmVkYkpONTd5dGZ1UXVCcVdPaklscUxC
+        YlpQSU5JTDZpUHZrT1JCeWh2alkybEE1NFg4bXN2M2krCnRYNWlodjJXeCs5VXhMMGlKRldSYndO
+        dlJYRGdwQ1VZTlI4bjlMT1NwUjZPdG9EMmNkOHFoNDQ2cml3VExraE8KdG5UdnJGWGdYSnFmdFI0
+        VkpRUS9laHNFUmpIWHpqalRWSUFmQllodVdKb0tvL0gydnZJZzhKU20xVUp3QWF2QgpENEpsa2Zv
+        VXdteFh6ZEhvd3d2ZnNWbkFTNlEzdlJTT2hsTGtKNk9vbWkyOU1wWEJPeEVVcVVzRHlHN3ovM2ww
+        CjhrenFyOTZDRXF2RnlNZVBQUWZXNkRwcEhVZ3hGOTFEdzJnWFhpOFowYzAvbGdkY1YxcVVjOFAv
+        Ci0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K
+      service:
+        name: pod-example
+        namespace: kube-system
+        path: /pods
+    failurePolicy: Fail
+    sideEffects: NoneOnDryRun
+    name: pod-example.example.com
+    admissionReviewVersions: ["v1", "v1beta1"]
+    namespaceSelector: {}
+    rules:
+      - apiGroups:   [""]
+        apiVersions: ["v1"]
+        operations:  ["CREATE"]
+        resources:   ["pods"]

@@ -2,6 +2,7 @@ package main
 
 import (
 	"io/ioutil"
+	"k8s-webhook-example/webhook"
 	"k8s.io/api/admission/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/util/json"
@@ -11,7 +12,7 @@ import (
 )
 
 func main() {
-	http.HandleFunc("/", func(writer http.ResponseWriter, request *http.Request) {
+	http.HandleFunc("/pods", func(writer http.ResponseWriter, request *http.Request) {
 		log.Println(request.RequestURI)
 		var body []byte
 		if request.Body != nil {
@@ -28,12 +29,12 @@ func main() {
 			},
 		}
 
-		deserializer := codecs.UniversalDeserializer()
+		deserializer := webhook.Codecs.UniversalDeserializer()
 		if _, _, err := deserializer.Decode(body, nil, &requestAdmissionReview); err != nil {
 			klog.Error(err)
-			responseAdmissionReview.Response = toV1AdmissionResponse(err)
+			responseAdmissionReview.Response = webhook.ToV1AdmissionResponse(err)
 		} else {
-			responseAdmissionReview.Response = admitPods(requestAdmissionReview)
+			responseAdmissionReview.Response = webhook.AdmitPods(requestAdmissionReview)
 		}
 		responseAdmissionReview.Response.UID = requestAdmissionReview.Request.UID
 		respBytes, _ := json.Marshal(responseAdmissionReview)
@@ -41,5 +42,15 @@ func main() {
 		writer.Write(respBytes)
 	})
 
-	http.ListenAndServe(":8080", nil)
+	//http.ListenAndServe(":8080", nil)
+	tlsConfig := webhook.Config{
+		CertFile: "/etc/webhook/certs/tls.crt",
+		KeyFile:  "/etc/webhook/certs/tls.key",
+	}
+	server := &http.Server{
+		Addr:      ":443",
+		TLSConfig: webhook.ConfigTLS(tlsConfig),
+	}
+
+	server.ListenAndServeTLS("", "")
 }

@@ -1,4 +1,4 @@
-package main
+package webhook
 
 import (
 	"fmt"
@@ -9,21 +9,21 @@ import (
 )
 
 // only allow pods to pull images from specific registry.
-func admitPods(ar v1.AdmissionReview) *v1.AdmissionResponse {
+func AdmitPods(ar v1.AdmissionReview) *v1.AdmissionResponse {
 	klog.V(2).Info("admitting pods")
 	podResource := metav1.GroupVersionResource{Group: "", Version: "v1", Resource: "pods"}
 
 	if ar.Request.Resource != podResource {
 		err := fmt.Errorf("expect resource to be %s", podResource)
 		klog.Error(err)
-		return toV1AdmissionResponse(err)
+		return ToV1AdmissionResponse(err)
 	}
 	raw := ar.Request.Object.Raw
 	pod := corev1.Pod{}
-	deserializer := codecs.UniversalDeserializer()
+	deserializer := Codecs.UniversalDeserializer()
 	if _, _, err := deserializer.Decode(raw, nil, &pod); err != nil {
 		klog.Error(err)
-		return toV1AdmissionResponse(err)
+		return ToV1AdmissionResponse(err)
 	}
 
 	reviewResponse := v1.AdmissionResponse{}

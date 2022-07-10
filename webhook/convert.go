@@ -1,4 +1,4 @@
-package main
+package webhook
 
 import (
 	v1 "k8s.io/api/admission/v1"
@@ -80,7 +80,7 @@ func convertAdmissionResponseToV1beta1(r *v1.AdmissionResponse) *v1beta1.Admissi
 	}
 }
 
-func toV1AdmissionResponse(err error) *v1.AdmissionResponse {
+func ToV1AdmissionResponse(err error) *v1.AdmissionResponse {
 	return &v1.AdmissionResponse{
 		Result: &metav1.Status{
 			Message: err.Error(),

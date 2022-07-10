@@ -1,4 +1,4 @@
-package main
+package webhook
 
 import (
 	"crypto/tls"
@@ -12,7 +12,7 @@ type Config struct {
 	KeyFile  string
 }
 
-func configTLS(config Config) *tls.Config {
+func ConfigTLS(config Config) *tls.Config {
 	sCert, err := tls.LoadX509KeyPair(config.CertFile, config.KeyFile)
 	if err != nil {
 		klog.Fatal(err)
