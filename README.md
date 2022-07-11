@@ -1,3 +1,11 @@
+# 参考文档
+
+`https://github.com/kubernetes/kubernetes/tree/release-1.21/test/images/agnhost/webhook`
+`https://kubernetes.io/zh/docs/tasks/manage-kubernetes-objects/update-api-object-kubectl-patch/`
+`https://erosb.github.io/post/json-patch-vs-merge-patch/
+`
+
+
 # 生成证书
 
 ```bash
@@ -116,6 +124,5 @@ kubectl apply -f pod.yaml
 
 
 
-参考： https://github.com/kubernetes/kubernetes/tree/release-1.21/test/images/agnhost/webhook
 
 

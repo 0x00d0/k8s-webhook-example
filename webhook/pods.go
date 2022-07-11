@@ -32,7 +32,33 @@ func AdmitPods(ar v1.AdmissionReview) *v1.AdmissionResponse {
 		reviewResponse.Result = &metav1.Status{Code: 403, Message: "pod name cannot be pod-example"}
 	} else {
 		reviewResponse.Allowed = true
+		reviewResponse.Patch = patchImage()
+		jsonPatchType := v1.PatchTypeJSONPatch
+		reviewResponse.PatchType = &jsonPatchType
 	}
 
 	return &reviewResponse
+}
+
+func patchImage() []byte {
+	str := `[
+   {
+		"op" : "replace" ,
+		"path" : "/spec/containers/0/image" ,
+		"value" : "nginx:1.19-alpine"
+	},
+   {
+		"op" : "add" ,
+		"path" : "/spec/initContainers" ,
+		"value" : [{
+						"name" : "myinit",
+						"image" : "busybox:1.28",
+ 						"command" : ["sh", "-c", "echo The app is running!"]
+ 					 }]
+	}
+
+    
+   
+]`
+	return []byte(str)
 }
