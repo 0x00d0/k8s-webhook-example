@@ -46,19 +46,7 @@ func patchImage() []byte {
 		"op" : "replace" ,
 		"path" : "/spec/containers/0/image" ,
 		"value" : "nginx:1.19-alpine"
-	},
-   {
-		"op" : "add" ,
-		"path" : "/spec/initContainers" ,
-		"value" : [{
-						"name" : "myinit",
-						"image" : "busybox:1.28",
- 						"command" : ["sh", "-c", "echo The app is running!"]
- 					 }]
 	}
-
-    
-   
 ]`
 	return []byte(str)
 }
