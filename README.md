@@ -111,17 +111,6 @@ kubectl apply -f admissionregistration_config.yaml
 
 ```
 
-# 测试
-
-```bash
-kubectl apply -f pod.yaml
-```
-- 当pod 名称是pod-example 则会出现如下错误
-> Error from server: error when creating "pod.yaml": admission webhook "pod-example.example.com" denied the request: pod name cannot be pod-example
-
-![image](img.png)
-
-
 
 
 
