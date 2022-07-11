@@ -36,7 +36,11 @@ webhooks:
     sideEffects: NoneOnDryRun
     name: pod-example.example.com
     admissionReviewVersions: ["v1", "v1beta1"]
-    namespaceSelector: {}
+    namespaceSelector:
+      matchExpressions:
+        - key: whook-injection
+          operator: in
+          values: ["enabled", "1"]
     rules:
       - apiGroups:   [""]
         apiVersions: ["v1"]

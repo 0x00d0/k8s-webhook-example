@@ -102,6 +102,27 @@ kubectl create secret tls pod-example-tls --cert=server.pem --key=server-key.pem
 
 ```
 
+# 给default设置label
+
+```bash
+kubectl label namespace default whook-injection=enabled
+# 删除标签命令 kubectl label namespace default whook-injection-
+
+kubectl get ns --show-labels
+```
+
+# webhook设置label匹配规则
+
+> 在 admissionregistration_config.yaml 中设置namespaceSelector规则
+
+```bash
+admissionregistration_config.yaml
+namespaceSelector:
+  matchExpressions:
+    - key: whook-injection
+      operator: in
+      values: ["enabled", "1"]
+```
 
 # WebHook部署到集群
 
@@ -110,19 +131,4 @@ kubectl apply -f deploy.yaml
 kubectl apply -f admissionregistration_config.yaml
 
 ```
-
-# 测试
-
-```bash
-kubectl apply -f pod.yaml
-```
-- 当pod 名称是pod-example 则会出现如下错误
-> Error from server: error when creating "pod.yaml": admission webhook "pod-example.example.com" denied the request: pod name cannot be pod-example
-
-![image](img.png)
-
-
-
-
-
 
